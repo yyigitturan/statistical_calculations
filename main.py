@@ -5,12 +5,20 @@ class Statistics:
         self.data = []
 
     def get_data_from_csv(self):
-        csv_file = input("Enter the CSV file name: ")
-        try:
-            data = pd.read_csv(csv_file)
-            self.data = data.values.flatten().tolist()
-        except Exception as e:
-            print("Error occurred while reading the CSV file:", e)
+        while True:
+            csv_file = input("Enter the CSV file name: ")
+            try:
+                data = pd.read_csv(csv_file)
+                columns = data.columns
+                print("Columns in the CSV file:", columns)
+                column_name = input("Enter the column name to retrieve data: ")
+                if column_name in columns:
+                    self.data = data[column_name].values.flatten().tolist()
+                    break
+                else:
+                    print("Invalid column name. Please try again.")
+            except Exception as e:
+                print("Error occurred while reading the CSV file:", e)
 
     def get_data_manually(self):
         while True:
@@ -56,6 +64,7 @@ class Statistics:
         weighted_mean = weighted_sum / total_weight
 
         print("Weighted mean:", weighted_mean)
+
     def perform_operations(self):
         while True:
             print("\nOperations Menu:")
