@@ -1,5 +1,6 @@
 import pandas as pd
-
+import statistics
+import numpy as np
 class Statistics:
     def __init__(self):
         self.data = []
@@ -72,6 +73,69 @@ class Statistics:
 
         print("Weighted mean:", weighted_mean)
 
+    def calculate_median(self):
+        if not self.data:
+            print("No data available.")
+            return
+
+        median = statistics.median(self.data)
+        print("Median:", median)
+
+    def calculate_percentile(self):
+        if not self.data:
+            print("No data available.")
+            return
+
+        while True:
+            try:
+                p = float(input("Enter the percentile value (0-100): "))
+                if 0 <= p <= 100:
+                    break
+                else:
+                    print("Invalid percentile value. Please enter a value between 0 and 100.")
+            except ValueError:
+                print("Invalid input. Please enter a numeric value.")
+
+        percentile = np.percentile(self.data, p)
+        print(f"{p}th percentile:", percentile)
+
+    def weighted_median(self):
+        if not self.data:
+            print("No data available.")
+            return
+
+        weights = []
+        while True:
+            weight = input("Enter a weight for the corresponding number (to finish, enter 'q'): ")
+            if weight.lower() == 'q':
+                break
+            try:
+                weight = float(weight)
+                weights.append(weight)
+            except ValueError:
+                print("Invalid input. Please try again.")
+
+        if len(self.data) != len(weights):
+            print("Number of values and weights should be the same.")
+            return
+
+        sorted_indices = np.argsort(self.data)
+        sorted_data = np.array(self.data)[sorted_indices]
+        sorted_weights = np.array(weights)[sorted_indices]
+
+        cumulative_weights = np.cumsum(sorted_weights)
+        total_weight = np.sum(sorted_weights)
+
+        midpoint = total_weight / 2.0
+
+        if np.all(cumulative_weights <= midpoint):
+            return sorted_data[-1]
+
+        index = np.searchsorted(cumulative_weights, midpoint, side='right')
+        if cumulative_weights[index - 1] == midpoint:
+            return (sorted_data[index - 1] + sorted_data[index]) / 2.0
+
+        return sorted_data[index]
     def perform_operations(self):
         while True:
             print("\nOperations Menu:")
@@ -80,7 +144,10 @@ class Statistics:
             print("-------------------------")
             print("3. Calculate arithmetic mean")
             print("4. Calculate weighted mean")
-            print("5. Exit")
+            print("5. Calculate median")
+            print("6. Calculate percentile")
+            print("7. Calculate weighted median")
+            print("100. Exit")
 
             choice = input("Enter your choice: ")
             if choice == '1':
@@ -92,6 +159,12 @@ class Statistics:
             elif choice == '4':
                 self.weighted_mean()
             elif choice == '5':
+                self.calculate_median()
+            elif choice == '6':
+                self.calculate_percentile()
+            elif choice == '7':
+                self.weighted_median()
+            elif choice == '100':
                 print("Exiting the program...")
                 break
             else:
