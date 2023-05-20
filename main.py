@@ -22,14 +22,21 @@ class Statistics:
 
     def get_data_manually(self):
         while True:
-            num = input("Enter a number (to quit, enter 'q'): ")
+            num = input("Enter a number (to quit, enter 'q'; to delete the last entry, enter 'd'): ")
             if num.lower() == 'q':
                 break
-            try:
-                num = float(num)
-                self.data.append(num)
-            except ValueError:
-                print("Invalid input. Please try again.")
+            elif num.lower() == 'd':
+                if self.data:
+                    self.data.pop()
+                    print("Last entry deleted.")
+                else:
+                    print("No data available to delete.")
+            else:
+                try:
+                    num = float(num)
+                    self.data.append(num)
+                except ValueError:
+                    print("Invalid input. Please try again.")
 
     def arithmetic_mean(self):
         if not self.data:
