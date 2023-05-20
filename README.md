@@ -1,1 +1,1 @@
-# statistical_calculations for data science
+# statistical calculations for data science
