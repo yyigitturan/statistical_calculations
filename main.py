@@ -1,6 +1,7 @@
 import pandas as pd
 import statistics
 import numpy as np
+
 class Statistics:
     def __init__(self):
         self.data = []
@@ -134,8 +135,34 @@ class Statistics:
         index = np.searchsorted(cumulative_weights, midpoint, side='right')
         if cumulative_weights[index - 1] == midpoint:
             return (sorted_data[index - 1] + sorted_data[index]) / 2.0
+        return print(sorted_data[index])
 
-        return sorted_data[index]
+    def trimmed_mean(self, trim_percentage):
+        if not self.data:
+            print("No data available.")
+            return
+
+        data_sorted = sorted(self.data)
+        trim_size = int(len(data_sorted) * trim_percentage / 100)
+        trimmed_data = data_sorted[trim_size:-trim_size]
+
+        if len(trimmed_data) == 0:
+            print("No data remaining after trimming.")
+            return
+
+        mean = sum(trimmed_data) / len(trimmed_data)
+        print("Trimmed Mean: {:.2f}".format(mean))
+
+    def robust_statistics(self):
+        if not self.data:
+            print("No data available.")
+            return
+
+        median = statistics.median(self.data)
+        mad = statistics.median([abs(num - median) for num in self.data])
+        print("Median:", median)
+        print("Median Absolute Deviation (MAD):", mad)
+
     def perform_operations(self):
         while True:
             print("\nOperations Menu:")
@@ -147,6 +174,8 @@ class Statistics:
             print("5. Calculate median")
             print("6. Calculate percentile")
             print("7. Calculate weighted median")
+            print("8. Calculate trimmed mean")
+            print("9. Calculate robust statistics")
             print("100. Exit")
 
             choice = input("Enter your choice: ")
@@ -164,6 +193,11 @@ class Statistics:
                 self.calculate_percentile()
             elif choice == '7':
                 self.weighted_median()
+            elif choice == '8':
+                trim_percentage = float(input("Enter the trim percentage (0-100): "))
+                self.trimmed_mean(trim_percentage)
+            elif choice == '9':
+                self.robust_statistics()
             elif choice == '100':
                 print("Exiting the program...")
                 break
