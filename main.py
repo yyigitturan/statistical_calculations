@@ -122,11 +122,9 @@ class Statistics:
 
         sorted_indices = np.argsort(self.data)
         sorted_data = np.array(self.data)[sorted_indices]
-        sorted_weights = np.array(weights)[sorted_indices]
-
+        sorted_weights = np.array(weights)[sorted_indices
         cumulative_weights = np.cumsum(sorted_weights)
         total_weight = np.sum(sorted_weights)
-
         midpoint = total_weight / 2.0
 
         if np.all(cumulative_weights <= midpoint):
