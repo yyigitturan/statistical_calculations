@@ -205,3 +205,4 @@ class Statistics:
 # Statistics sınıfını kullanarak işlemleri gerçekleştirme
 s = Statistics()
 s.perform_operations()
+
