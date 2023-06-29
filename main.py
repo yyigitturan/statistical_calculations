@@ -202,6 +202,7 @@ class Statistics:
             else:
                 print("Invalid choice. Please try again.")
 
+
 # Statistics sınıfını kullanarak işlemleri gerçekleştirme
 s = Statistics()
 s.perform_operations()
