@@ -1,8 +1,9 @@
+from enum import unique
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import norm
-
+import statistics
 class Stat:
     def __init__(self):
         self.data = []
@@ -43,7 +44,7 @@ class Stat:
                 except ValueError:
                     print("Invalid input. Please try again.")
 
-    def generate_frequency_table(self, class_interval, class_count):
+    def frequency_table(self, class_interval, class_count):
         if not self.data:
             print("No data available. Please enter data first.")
             return
@@ -77,16 +78,9 @@ class Stat:
             'Fi': cumulative_frequencies,
             'pi': class_percentages
         })
-
         return table
 
-    def arithmetic_mean(self):
-        if self.data == None:
-            print("No data available.")
-        else:
-            return sum(self.data) / len(self.data)
-
-    def generate_histogram(self):
+    def histogram(self):
         if not self.data:
             print("No data available. Please enter data first.")
             return
@@ -133,10 +127,10 @@ class Stat:
         plt.title('Distribution Curve')
         plt.show()
 
-    def generate_stem_and_leaf(self):
+    def stem_and_leaf(self):
         if not self.data:
-            print("No data available. Please enter data first.")
-            return
+            return print("No data available. Please enter data first.")
+            
 
         stem_leaf_dict = {}
         for value in self.data:
@@ -146,15 +140,58 @@ class Stat:
                 stem_leaf_dict[stem].append(leaf)
             else:
                 stem_leaf_dict[stem] = [leaf]
-
+        print("Stem| Leaf")
         for stem, leaves in sorted(stem_leaf_dict.items()):
             print(f"{stem} | {' '.join(map(str, sorted(leaves)))}")
 
-# Usage example:
+    def box_plot(self):
+        if not self.data:
+            return "No data available. Please enter data first."            
+        plt.boxplot(self.data)
+        plt.xlabel('Data')
+        plt.ylabel('Values')
+        plt.title('Box Plot')
+        plt.show()
+
+    def bar_graph(self):
+        if not self.data:
+            return "No data available. Please enter data first."
+        unique_values, value_counts = np.unique(self.data, return_counts=True)
+        plt.bar(unique_values, value_counts)
+        plt.xlabel('Values')
+        plt.ylabel('Frequency')
+        plt.title('Bar Graph')
+        plt.show()
+    
+    def pie_chart(self):
+        if not self.data:
+            return "No data available. Please enter data first."
+        unique_values, value_counts = np.unique(self.data, return_counts=True)
+        plt.pie(value_counts, labels=unique_values, autopct='%1.1f%%')
+        plt.title('Pie Chart')
+        plt.show()
+            
+    def arithmetic_mean(self):
+        mean = statistics.mean(self.data)
+        print(f'Mean:{mean}') 
+        return mean
+    
+    def median(self):
+        median = statistics.median(self.data)
+        print(f'Median: {median}')
+        return median
+    
+    def mode(self):
+        mode = statistics.mode(self.data)
+        print('Mode:', mode)                 
+        return mode 
+    
 stat = Stat()
 stat.get_data_manually()
-stat.generate_stem_and_leaf()
-
+stat.mode()
+stat.mode()
+stat.arithmetic_mean()
+stat.median()
 
 
 
