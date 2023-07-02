@@ -1,4 +1,5 @@
 from enum import unique
+from textwrap import wrap
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -186,12 +187,20 @@ class Stat:
         print('Mode:', mode)                 
         return mode 
     
+    def compare_amm(self):
+        mean = self.arithmetic_mean()
+        median = self.median()
+        mode = self.mode()
+        if mode > median and median > mean:
+            print('Left skewed  & negatively biased distribution')
+        elif mean > median and median > mode:
+            print('Right skewed & positively biased distribution')   
+        elif mean == median == mode:
+            print('Symmetrical distribution')    
+        
+            
 stat = Stat()
-stat.get_data_manually()
-stat.mode()
-stat.mode()
-stat.arithmetic_mean()
-stat.median()
+            
 
 
 
