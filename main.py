@@ -115,15 +115,9 @@ class Stat:
         if not self.data:
             print("No data available. Please enter data first.")
             return
-
-        # Fit a normal distribution curve to the data
         mu, sigma = norm.fit(self.data)
-
-        # Create an array of values to generate the curve
         x = np.linspace(min(self.data), max(self.data), 100)
         y = norm.pdf(x, mu, sigma)
-
-        # Plot the distribution curve
         plt.plot(x, y, color='blue')
         plt.xlabel('X')
         plt.ylabel('Probability Density')
@@ -133,8 +127,6 @@ class Stat:
     def stem_and_leaf(self):
         if not self.data:
             return print("No data available. Please enter data first.")
-            
-
         stem_leaf_dict = {}
         for value in self.data:
             stem = value // 10
@@ -226,8 +218,61 @@ class Stat:
         print(f'The final value (Pn) after {n} years will be: {Pn}')
         return Pn
 
+    def harmonic_mean(self):
+        if len(self.data) == 0:
+            return None
+        reciprocal_sum = sum(1 / num for num in self.data)
+        harmonic_mean = len(self.data) / reciprocal_sum
+        print(f'Harmonic Mean: {harmonic_mean}')
+        return harmonic_mean
+
+    def weighted_average(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+        self.weights = []
+        for i in range(len(self.data)):
+            weight = float(input(f"Enter the weight for data entry {i + 1}: "))
+            self.weights.append(weight)
+        if len(self.data) != len(self.weights):
+            return print('Number of data entries and weights should be the same.')
+        weighted_sum = sum(x * w for x, w in zip(self.data, self.weights))
+        total_weight = sum(self.weights)
+        weighted_avg = weighted_sum / total_weight
+        print(f'Weighted Average: {weighted_avg}')
+        return weighted_avg
+
+    def squared_mean(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+        squared_values = [x**2 for x in self.data]
+        squared_mean = math.sqrt(sum(squared_values) / len(self.data))
+        print(f'Squared Mean: {squared_mean}')
+        return squared_mean
+
+    def percentile(self, p):
+        if not self.data:
+             return print('No data available. Please enter data first.')
+
+        sorted_data = sorted(self.data)
+        index = (p / 100) * (len(sorted_data) - 1)
+        lower_index = int(index)
+        upper_index = lower_index + 1 if lower_index < len(sorted_data) - 1 else lower_index
+        lower_value = sorted_data[lower_index]
+        upper_value = sorted_data[upper_index]
+        interpolated_value = lower_value + (index - lower_index) * (upper_value - lower_value)
+
+        print(f'{p}th percentile: {interpolated_value}')
+        return interpolated_value
+
+    def quartiles(self):
+        return self.percentile(25), self.percentile(50), self.percentile(75)
+
+
+
+
+
 
 stat = Stat()
 stat.get_data_from_csv()
-stat.degisim_orani()
-    
+stat.percentile(20)
+stat.quartiles()
