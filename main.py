@@ -5,11 +5,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import norm
 import statistics
+import math
 class Stat:
+    """
+    
+    """
     def __init__(self):
         self.data = []
-
-    # Other functions will be added here...
 
     def get_data_from_csv(self):
         while True:
@@ -191,17 +193,41 @@ class Stat:
         mean = self.arithmetic_mean()
         median = self.median()
         mode = self.mode()
-        if mode > median and median > mean:
+        if mode >= median and median >= mean:
             print('Left skewed  & negatively biased distribution')
-        elif mean > median and median > mode:
+        elif mean >= median and median >= mode:
             print('Right skewed & positively biased distribution')   
         elif mean == median == mode:
             print('Symmetrical distribution')    
         
-            
+    def geometric_mean(self):
+        if not self.data:
+            return print('No data avaible. Please enter data first.')
+        product = 1
+        for value in self.data:
+            product *= value
+        geometric_mean = math.pow(product, 1/len(self.data))        
+        print(f'Geometric mean: {geometric_mean}')
+        return geometric_mean
+
+    def predict_future_value(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+        """
+        This formula is used to calculate the final value of an initial value after a certain number of years with a specific growth rate.
+        Po: Initial value
+        r: Growth rate
+        n: Number of years or time interval
+        """
+        Po = float(input("Enter the initial value (Po): "))
+        r = float(input("Enter the growth rate (r): "))
+        n = float(input("Enter the number of years (n): "))
+        Pn = Po * (1 + r)**n 
+        print(f'The final value (Pn) after {n} years will be: {Pn}')
+        return Pn
+
+
 stat = Stat()
-            
-
-
-
+stat.get_data_from_csv()
+stat.degisim_orani()
     
