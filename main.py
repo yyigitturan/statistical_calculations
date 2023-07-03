@@ -3,7 +3,7 @@ from textwrap import wrap
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import norm
+from scipy.stats import norm, skew, kurtosis, zscore
 import statistics
 import math
 class Stat:
@@ -250,29 +250,111 @@ class Stat:
         return squared_mean
 
     def percentile(self, p):
-        if not self.data:
-             return print('No data available. Please enter data first.')
-
-        sorted_data = sorted(self.data)
-        index = (p / 100) * (len(sorted_data) - 1)
-        lower_index = int(index)
-        upper_index = lower_index + 1 if lower_index < len(sorted_data) - 1 else lower_index
-        lower_value = sorted_data[lower_index]
-        upper_value = sorted_data[upper_index]
-        interpolated_value = lower_value + (index - lower_index) * (upper_value - lower_value)
-
-        print(f'{p}th percentile: {interpolated_value}')
-        return interpolated_value
-
+        percentile_value = np.percentile(self.data, p)
+        print(f'{p}th percentile: {percentile_value}')
+        return percentile_value
+    
     def quartiles(self):
-        return self.percentile(25), self.percentile(50), self.percentile(75)
+        Q1 = np.percentile(self.data, 25)
+        Q2 = np.percentile(self.data, 50)
+        Q3 = np.percentile(self.data, 75)
+        print(f'Q1: {Q1}\nQ2: {Q2}\nQ3: {Q3}')
+        return Q1, Q2, Q3
+    
+    def ceyrek_sapma(self):
+        Q1, Q3, Q2 = self.quartiles()
+        ceyrek_sapma = (Q3 - Q1) / 2
+        print(f'Ceyrek Sapma: {ceyrek_sapma}')
+        return ceyrek_sapma
+
+    def average_absolute_deviation(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+
+        avd = np.mean(np.abs(self.data - np.mean(self.data)))
+        print(f'Average absolute deviation: {avd}')
+        return avd
+
+    def variance(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+    
+        variance = np.var(self.data)
+        print(f'Variance: {variance}')
+        return variance
+
+    def standard_deviation(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+    
+        standard_deviation = np.std(self.data)
+        print(f'Standard Deviation: {standard_deviation}')
+        return standard_deviation
+
+    def standard_error(self):
+        if not self.data.size:
+            return print('No data available. Please enter data first.')
+
+        standard_error = np.std(self.data) / np.sqrt(len(self.data))
+        print(f'Standard Error: {standard_error}')
+        return standard_error
+
+    def calculate_coefficient_of_variation(self):
+        if not self.data.size:
+            return print('No data available. Please enter data first.')
+
+        mean = np.mean(self.data)
+        std_deviation = np.std(self.data)
+        coefficient_of_variation = (std_deviation / mean) * 100
+        print(f'Coefficient of Variation: {coefficient_of_variation}%')
+        return coefficient_of_variation
+    
+    def skewness(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+        skewness_value = skew(self.data)
+        print(f'Skewness: {skewness_value}')
+        return skewness_value
+    
+    def kurtosis(self):
+        if not self.data:
+            return print('No data available. Please enter data first.')
+        kurtosis_value = kurtosis(self.data)
+        print(f'Kurtosis: {kurtosis_value}')
+        return kurtosis_value
+
+    def analyze_outliers(self):
+        if len(self.data) == 0:
+            print("Veri yok. Lütfen veri ekleyin.")
+            return
+
+        z_scores = zscore(self.data)
+        threshold = 3
+
+        outliers = np.where(np.abs(z_scores) > threshold)[0]
+
+        if len(outliers) == 0:
+            print("Aykırı Değer Bulunamadı.")
+        else:
+            print("Aykırı Değerler:")
+            print("-----------------")
+            for index in outliers:
+                print(self.data[index])
+            print("-----------------")
+
+        plt.boxplot(self.data, notch=True, vert=False)
+        plt.title("Box Plot")
+        plt.xlabel("Değerler")
+        plt.ylabel("Box Plot")
+        plt.show()
+        
+
+        
 
 
-
-
-
-
+# Test
 stat = Stat()
 stat.get_data_from_csv()
-stat.percentile(20)
-stat.quartiles()
+
+     
+
