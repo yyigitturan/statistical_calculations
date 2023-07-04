@@ -14,21 +14,21 @@ class Stat:
     def __init__(self):
         self.data = []
 
-    # def get_data_from_csv(self):
-    #     while True:
-    #         csv_file = input("Enter the CSV file name: ")
-    #         try:
-    #             data = pd.read_csv(csv_file)
-    #             columns = data.columns
-    #             print("Columns in the CSV file:", columns)
-    #             column_name = input("Enter the column name to retrieve data: ")
-    #             if column_name in columns:
-    #                 self.data = data[column_name].values.flatten().tolist()
-    #                 break
-    #             else:
-    #                 print("Invalid column name. Please try again.")
-    #         except Exception as e:
-    #             print("Error occurred while reading the CSV file:", e)
+    def get_data_from_csv(self):
+        while True:
+            csv_file = input("Enter the CSV file name: ")
+            try:
+                data = pd.read_csv(csv_file)
+                columns = data.columns
+                print("Columns in the CSV file:", columns)
+                column_name = input("Enter the column name to retrieve data: ")
+                if column_name in columns:
+                    self.data = data[column_name].values.flatten().tolist()
+                    break
+                else:
+                    print("Invalid column name. Please try again.")
+            except Exception as e:
+                print("Error occurred while reading the CSV file:", e)
 
     def get_data_manually(self):
         while True:
