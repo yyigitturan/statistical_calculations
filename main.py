@@ -1,9 +1,10 @@
+from sklearn.linear_model import LinearRegression
 from enum import unique
 from textwrap import wrap
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import norm, skew, kurtosis, zscore
+from scipy.stats import norm, skew, kurtosis, zscore, stats
 import statistics
 import math
 class Stat:
@@ -13,21 +14,21 @@ class Stat:
     def __init__(self):
         self.data = []
 
-    def get_data_from_csv(self):
-        while True:
-            csv_file = input("Enter the CSV file name: ")
-            try:
-                data = pd.read_csv(csv_file)
-                columns = data.columns
-                print("Columns in the CSV file:", columns)
-                column_name = input("Enter the column name to retrieve data: ")
-                if column_name in columns:
-                    self.data = data[column_name].values.flatten().tolist()
-                    break
-                else:
-                    print("Invalid column name. Please try again.")
-            except Exception as e:
-                print("Error occurred while reading the CSV file:", e)
+    # def get_data_from_csv(self):
+    #     while True:
+    #         csv_file = input("Enter the CSV file name: ")
+    #         try:
+    #             data = pd.read_csv(csv_file)
+    #             columns = data.columns
+    #             print("Columns in the CSV file:", columns)
+    #             column_name = input("Enter the column name to retrieve data: ")
+    #             if column_name in columns:
+    #                 self.data = data[column_name].values.flatten().tolist()
+    #                 break
+    #             else:
+    #                 print("Invalid column name. Please try again.")
+    #         except Exception as e:
+    #             print("Error occurred while reading the CSV file:", e)
 
     def get_data_manually(self):
         while True:
@@ -325,7 +326,7 @@ class Stat:
 
     def analyze_outliers(self):
         if len(self.data) == 0:
-            print("Veri yok. Lütfen veri ekleyin.")
+            print("No data available. Please add data.")
             return
 
         z_scores = zscore(self.data)
@@ -334,9 +335,9 @@ class Stat:
         outliers = np.where(np.abs(z_scores) > threshold)[0]
 
         if len(outliers) == 0:
-            print("Aykırı Değer Bulunamadı.")
+            print("No outliers found.")
         else:
-            print("Aykırı Değerler:")
+            print("Outliers:")
             print("-----------------")
             for index in outliers:
                 print(self.data[index])
@@ -344,17 +345,12 @@ class Stat:
 
         plt.boxplot(self.data, notch=True, vert=False)
         plt.title("Box Plot")
-        plt.xlabel("Değerler")
+        plt.xlabel("Values")
         plt.ylabel("Box Plot")
-        plt.show()
-        
-
-        
+        plt.show() 
 
 
-# Test
-stat = Stat()
-stat.get_data_from_csv()
 
-     
+
+
 
