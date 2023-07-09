@@ -9,6 +9,7 @@ import statistics
 import math
 class Stat:
     """
+
     
     """
     def __init__(self):
