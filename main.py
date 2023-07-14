@@ -10,7 +10,7 @@ import math
 class Stat:
     """
 
-add func here later
+add func names here later
     
     """
     def __init__(self):
